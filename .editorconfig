@@ -1,0 +1,17 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+
+[*.{cs,go}]
+indent_style = tab
+indent_size = 4
+
+[*.{php,composer.json,py,yaml,sublime-project}]
+indent_size = 4
+
+[*.blade.php]
+indent_size = 2

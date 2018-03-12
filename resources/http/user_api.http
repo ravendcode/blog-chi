@@ -1,0 +1,37 @@
+# API User
+@host = http://localhost:3000/api/user
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTIwNjAxMDk0fQ.Qek51Tg0VqcJ1v2VAziHgRSw0eMwwQTAx2plZi5rEhY
+###
+GET {{host}}
+###
+POST {{host}}
+content-type: application/json
+
+{
+  "username": "Bob44",
+  "password": "qwerty"
+}
+###
+GET {{host}}/2
+###
+PATCH {{host}}/1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "Bob"
+}
+###
+DELETE {{host}}/1
+Authorization: Bearer {{token}}
+###
+GET {{host}}/me
+Authorization: Bearer {{token}}
+###
+POST {{host}}/login
+content-type: application/json
+
+{
+  "username": "John",
+  "password": "qwerty"
+}

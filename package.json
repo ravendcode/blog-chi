@@ -1,0 +1,15 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "ravendcode <ravendcode@gmail.com>",
+  "scripts": {
+    "start": "export ENV=production || set ENV=production&& yarn build && bin/blogchi.exe",
+    "build": "go build -o bin/blogchi.exe ./blogchi",
+    "dev": "fresh"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0"
+  }
+}
