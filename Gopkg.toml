@@ -40,4 +40,4 @@
 [metadata.heroku]
   root-package = "github.com/ravendcode/blog-chi"
   go-version = "1.10"
-  install = [ "./blogchi/..." ]
+  install = [ "./..." ]
