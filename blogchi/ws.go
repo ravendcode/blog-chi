@@ -58,7 +58,7 @@ func echoWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	uuid := addConnection(conn)
-	err = conn.WriteJSON(message{Type: "server", Data: "Hello", UUID: uuid})
+	err = conn.WriteJSON(message{Type: "server:hello", Data: "Hello", UUID: uuid})
 	if err != nil {
 		removeConnection(uuid)
 		log.Println("echoWS conn.WriteJSON", err)

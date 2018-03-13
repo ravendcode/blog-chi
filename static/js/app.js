@@ -9,6 +9,7 @@
     }
 
     var uuid;
+    var connected = false;
     // var echoWs = new WebSocket(wsUrl);
     var echoWs = new ReconnectingWebSocket(wsUrl);
 
@@ -24,18 +25,23 @@
     echoWs.onmessage = function (event) {
       var received = JSON.parse((event.data))
 
-
-      var liElem = document.createElement('li');
-      var content = document.createTextNode(received.uuid + ': ' + received.data);
-      if (received.type === 'server') {
+      if (received.type === 'server:hello') {
         uuid = received.uuid;
-
-        var uuidTextNode = document.createTextNode(received.uuid);
-        uuidElem.appendChild(uuidTextNode)
-        content = document.createTextNode(received.type + ': ' + received.data);
+        uuidElem.innerText = received.uuid;
+        if (!connected) {
+          content = document.createTextNode(received.type + ': ' + received.data);
+          liElem.appendChild(content);
+          messagesUlElem.appendChild(liElem);
+          connected = true;
+        }
       }
-      liElem.appendChild(content);
-      messagesUlElem.appendChild(liElem);
+
+      if (received.type === 'client') {
+        var liElem = document.createElement('li');
+        var content = document.createTextNode(received.uuid + ': ' + received.data);
+        liElem.appendChild(content);
+        messagesUlElem.appendChild(liElem);
+      }
     };
 
     echoWs.onclose = function (event) {
