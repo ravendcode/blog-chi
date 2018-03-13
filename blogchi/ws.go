@@ -34,11 +34,7 @@ func broadcast(m *message) {
 }
 
 func getUUID() string {
-	u, err := uuid.NewV4()
-	if err != nil {
-		log.Println("WS getUUID", err)
-		return ""
-	}
+	u := uuid.NewV4()
 	return u.String()
 }
 
