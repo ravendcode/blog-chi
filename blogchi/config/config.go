@@ -17,7 +17,7 @@ func NewConfig() *Config {
 		Port: os.Getenv("PORT"),
 	}
 	if config.Env == "" {
-		config.Env = "development"
+		config.Env = "production"
 	}
 	if config.Env == "production" {
 		config.Port = "80"
