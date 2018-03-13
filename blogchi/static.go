@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -11,6 +12,7 @@ import (
 
 func static(r *chi.Mux) {
 	workDir, _ := os.Getwd()
+	fmt.Println(1, http.Dir(filepath.Join(workDir, "node_modules")))
 	fileServer(r, "/static", http.Dir(filepath.Join(workDir, "static")))
 	fileServer(r, "/node_modules", http.Dir(filepath.Join(workDir, "node_modules")))
 }
