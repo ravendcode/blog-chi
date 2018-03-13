@@ -79,6 +79,7 @@ func echoWS(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		broadcast(message)
+
 		// err = conn.WriteJSON(message)
 		// if err != nil {
 		// 	removeConnection(uuid)
