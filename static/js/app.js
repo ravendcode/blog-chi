@@ -28,17 +28,19 @@
       var liElem = document.createElement('li');
       var content = document.createTextNode(received.uuid + ': ' + received.data);
       if (received.type === 'server') {
-        uuid = received.uuid;
-        var uuidTextNode = document.createTextNode(received.uuid);
-        uuidElem.appendChild(uuidTextNode)
-        content = document.createTextNode(received.type + ': ' + received.data);
+        if (!uuid) {
+          uuid = received.uuid;
+          var uuidTextNode = document.createTextNode(received.uuid);
+          uuidElem.appendChild(uuidTextNode)
+          content = document.createTextNode(received.type + ': ' + received.data);
+        }
       }
       liElem.appendChild(content);
       messagesUlElem.appendChild(liElem);
     };
 
     echoWs.onclose = function (event) {
-      console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason);
+      // console.log('Socket is closed. Reconnect will be attempted in 1 second.');
       // setTimeout(function () {
         //   connect();
         // }, 1000);
