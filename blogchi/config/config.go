@@ -16,6 +16,7 @@ func NewConfig() *Config {
 		Env:  os.Getenv("ENV"),
 		Port: os.Getenv("PORT"),
 	}
+
 	if config.Env == "" {
 		config.Env = "production"
 	}
