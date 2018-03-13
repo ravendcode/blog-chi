@@ -29,6 +29,7 @@
         uuid = received.uuid;
         uuidElem.innerText = received.uuid;
         if (!connected) {
+          var liElem = document.createElement('li');
           content = document.createTextNode(received.type + ': ' + received.data);
           liElem.appendChild(content);
           messagesUlElem.appendChild(liElem);
