@@ -1,5 +1,7 @@
 package config
 
+import "os"
+
 // Config app
 type Config struct {
 	Env  string
@@ -9,10 +11,10 @@ type Config struct {
 // NewConfig create new Config
 func NewConfig() *Config {
 	config := &Config{
-		// Env:  os.Getenv("ENV"),
-		// Port: os.Getenv("PORT"),
-		Env:  "production",
-		Port: "80",
+		Env:  os.Getenv("ENV"),
+		Port: os.Getenv("PORT"),
+		// Env:  "production",
+		// Port: "80",
 	}
 
 	// if config.Env == "" {
