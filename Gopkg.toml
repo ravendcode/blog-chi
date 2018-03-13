@@ -36,3 +36,8 @@
 [prune]
   go-tests = true
   unused-packages = true
+
+[metadata.heroku]
+  root-package = "github.com/ravendcode/blog-chi/blogchi"
+  go-version = "1.10"
+  install = [ "./..." ]
