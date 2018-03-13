@@ -29,11 +29,11 @@
       var content = document.createTextNode(received.uuid + ': ' + received.data);
       if (received.type === 'server') {
         if (!uuid) {
-          uuid = received.uuid;
           var uuidTextNode = document.createTextNode(received.uuid);
           uuidElem.appendChild(uuidTextNode)
           content = document.createTextNode(received.type + ': ' + received.data);
         }
+        uuid = received.uuid;
       }
       liElem.appendChild(content);
       messagesUlElem.appendChild(liElem);
