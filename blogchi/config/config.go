@@ -1,6 +1,9 @@
 package config
 
-import "os"
+import (
+	"flag"
+	"os"
+)
 
 // Config app
 type Config struct {
@@ -10,18 +13,15 @@ type Config struct {
 
 // NewConfig create new Config
 func NewConfig() *Config {
+	env := flag.String("env", os.Getenv("ENV"), "server environment")
+	port := flag.String("port", os.Getenv("PORT"), "server listing port")
+
+	flag.Parse()
+
 	config := &Config{
-		Env:  os.Getenv("ENV"),
-		Port: os.Getenv("PORT"),
-		// Env:  "production",
-		// Port: "80",
+		Env:  *env,
+		Port: *port,
 	}
 
-	// if config.Env == "" {
-	// 	config.Env = "production"
-	// }
-	// if config.Env == "production" {
-	// 	config.Port = "80"
-	// }
 	return config
 }
