@@ -35,7 +35,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Recoverer)
-	r.Use(middleware.Logger)
+	// r.Use(middleware.Logger)
 	r.Use(middleware.Timeout(60 * time.Second))
 	// r.Use(exampleMiddleware)
 
@@ -45,6 +45,7 @@ func main() {
 	static(r)
 
 	r.Get("/", notFound)
+	r.Get("/echo", echoWS)
 
 	r.Mount("/api/user", userAPIRouter())
 

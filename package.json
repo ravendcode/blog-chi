@@ -10,6 +10,7 @@
     "dev": "fresh"
   },
   "dependencies": {
-    "bootstrap": "^4.0.0"
+    "bootstrap": "^4.0.0",
+    "reconnectingwebsocket": "^1.0.0"
   }
 }

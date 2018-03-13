@@ -10,12 +10,41 @@
   <link rel="icon" type="image/x-ico" href="/static/ico/favicon-64x64.ico" sizes="64x64">
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/static/css/app.css">
-  <title>Blog-Chi</title>
+  <title>Blog Chi</title>
 </head>
 <body>
   <div class="container">
-    <h1>Blog-Chi</h1>
+    <div class="row">
+      <div class="col">
+        <h1>Blog Chi</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2>Chat</h2>
+        <h4 id="uuid"></h4>
+        <form action="" id="message-form">
+          <div class="form-group">
+            <label for="message">Message</label>
+            <input
+              id="message"
+              type="text"
+              name="message"
+              class="form-control"
+              autocomplete="off"
+              placeholder="Send message..."
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <ul id="messages"></ul>
+      </div>
+    </div>
   </div>
+  <script src="/node_modules/reconnectingwebsocket/reconnecting-websocket.min.js"></script>
   <script src="/static/js/app.js"></script>
 </body>
 </html>

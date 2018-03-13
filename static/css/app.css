@@ -1,3 +1,9 @@
 body {
   color: red;
 }
+
+ul#messages {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
