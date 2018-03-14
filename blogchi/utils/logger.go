@@ -10,14 +10,15 @@ import (
 )
 
 const (
+	off     string = "\x1b[0m"
+	white   string = "\x1b[39m"
+	gray    string = "\x1b[90m"
 	red     string = "\x1b[91m"
 	green   string = "\x1b[92m"
 	yellow  string = "\x1b[93m"
-	cyan    string = "\x1b[96m"
-	white   string = "\x1b[39m"
 	blue    string = "\x1b[94m"
 	magenta string = "\x1b[95m"
-	gray    string = "\x1b[90m"
+	cyan    string = "\x1b[96m"
 )
 
 // Logger interface for logger
@@ -87,17 +88,19 @@ func (l *logger) Blue() *logger {
 	l.Color = blue
 	return l
 }
+
 func (l *logger) Magenta() *logger {
 	l.Color = magenta
 	return l
 }
+
 func (l *logger) Gray() *logger {
 	l.Color = gray
 	return l
 }
 
 func colorWrap(l *logger, str string) string {
-	result := fmt.Sprintf("%s%s%s", l.Color, str, white)
+	result := fmt.Sprintf("%s%s%s", l.Color, str, off)
 	l.Color = green
 	return result
 }

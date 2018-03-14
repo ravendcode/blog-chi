@@ -3,7 +3,7 @@
 
   function connect() {
     var port = location.port === '' ? '' : ':' + location.port;
-    var wsUrl = 'ws://' + document.domain + port + '/echo';
+    var wsUrl = 'ws://' + document.domain + port + '/echows';
     if (/https/.test(location.href)) {
       wsUrl = 'wss://' + document.domain + '/echo';
     }

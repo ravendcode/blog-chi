@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -12,6 +14,7 @@ import (
 type Response interface {
 	Send(w http.ResponseWriter, statusCode int, v ...interface{}) *response
 	JSON(data ...interface{})
+	SendFile(w http.ResponseWriter, req *http.Request, name string)
 }
 
 type response struct {
@@ -67,6 +70,11 @@ func (r *response) JSON(data ...interface{}) {
 		http.Error(r.ResponseWriter, err.Error(), http.StatusInternalServerError)
 	}
 	r.clean()
+}
+
+func (r *response) SendFile(w http.ResponseWriter, req *http.Request, name string) {
+	workDir, _ := os.Getwd()
+	http.ServeFile(w, req, fmt.Sprintf("%s/%s", http.Dir(filepath.Join(workDir, "static")), name))
 }
 
 func (r *response) clean() {

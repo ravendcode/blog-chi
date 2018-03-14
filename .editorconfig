@@ -6,7 +6,7 @@ end_of_line = lf
 indent_style = space
 indent_size = 2
 
-[*.{cs,go}]
+[*.{cs,go,todo}]
 indent_style = tab
 indent_size = 4
 

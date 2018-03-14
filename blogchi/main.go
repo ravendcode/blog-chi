@@ -43,7 +43,8 @@ func main() {
 	static(r)
 
 	r.Get("/", notFound)
-	r.Get("/echo", echoWS)
+	r.Get("/echo", echo)
+	r.Get("/echows", echoWS)
 
 	r.Mount("/api/user", userAPIRouter())
 

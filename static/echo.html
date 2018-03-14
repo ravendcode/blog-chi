@@ -17,11 +17,30 @@
     <div class="row">
       <div class="col">
         <h1>Blog Chi</h1>
-        <nav>
-          <ul>
-            <li><a href="/echo">Chat</a></li>
-          </ul>
-        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2>Chat</h2>
+        <h4 id="uuid"></h4>
+        <form action="" id="message-form">
+          <div class="form-group">
+            <label for="message">Message</label>
+            <input
+              id="message"
+              type="text"
+              name="message"
+              class="form-control"
+              autocomplete="off"
+              placeholder="Send message..."
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <ul id="messages"></ul>
       </div>
     </div>
   </div>

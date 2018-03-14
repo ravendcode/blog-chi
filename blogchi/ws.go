@@ -68,7 +68,7 @@ func echoWS(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			if c, ok := err.(*websocket.CloseError); ok {
 				if c.Code == 1001 {
-					logger.Info(uuid, err)
+					logger.Info("uuid:", uuid, err)
 					removeConnection(uuid)
 					break
 				}
