@@ -37,16 +37,16 @@ func main() {
 	// r.Use(middleware.Logger)
 	r.Use(middleware.Timeout(60 * time.Second))
 
-	r.NotFound(notFound)
-	r.MethodNotAllowed(methodNotAllowed)
+	r.NotFound(notFoundHandler)
+	r.MethodNotAllowed(methodNotAllowedHandler)
 
 	static(r)
 
-	r.Get("/", notFound)
-	r.Get("/echo", echo)
+	r.Get("/", notFoundHandler)
+	r.Get("/echo", echoHandler)
 	r.Get("/echows", echoWS)
 
-	r.Mount("/api/user", userAPIRouter())
+	r.Mount("/api/user", userResource{}.Routes())
 
 	logger.Yellow().Infof("Server is listening on http://localhost:%s", config.Port)
 	http.ListenAndServe(":"+config.Port, r)

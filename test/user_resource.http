@@ -1,4 +1,4 @@
-# API User
+# User API
 @host = http://localhost:3000/api/user
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTIwNjAxMDk0fQ.Qek51Tg0VqcJ1v2VAziHgRSw0eMwwQTAx2plZi5rEhY
 ###
@@ -12,7 +12,7 @@ content-type: application/json
   "password": "qwerty"
 }
 ###
-GET {{host}}/2
+GET {{host}}/1
 ###
 PATCH {{host}}/1
 content-type: application/json

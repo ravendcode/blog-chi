@@ -9,7 +9,8 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type user struct {
+// User model
+type User struct {
 	ID         int    `json:"id,omitempty"`
 	Username   string `json:"username"`
 	Email      string `json:"email"`
@@ -17,9 +18,10 @@ type user struct {
 	AccesToken string `json:"accessToken"`
 }
 
-type users []*user
+// Users slice User
+type Users []*User
 
-var storage = users{{
+var storage = Users{{
 	ID:         1,
 	Username:   "root",
 	Email:      "root@email.com",
@@ -27,20 +29,23 @@ var storage = users{{
 	AccesToken: "",
 }}
 
-func userAPIRouter() http.Handler {
+type userResource struct{}
+
+func (rs userResource) Routes() chi.Router {
 	r := chi.NewRouter()
-	r.Get("/", userGetAll)
-	r.Post("/", userCreateOne)
+	// r.Use() // some middleware..
+	r.Get("/", rs.getAll)
+	r.Post("/", rs.createOne)
 	r.Route("/{id:[0-9]+}", func(r chi.Router) {
-		r.Use(userCtx)
-		r.Get("/", userFindOne)
-		r.Patch("/", userUpdateOne)
-		r.Delete("/", userDeleteOne)
+		r.Use(rs.userCtx)
+		r.Get("/", rs.findOne)
+		r.Patch("/", rs.updateOne)
+		r.Delete("/", rs.deleteOne)
 	})
 	return r
 }
 
-func userCtx(next http.Handler) http.Handler {
+func (rs userResource) userCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		stringID := chi.URLParam(r, "id")
 		id, err := strconv.Atoi(stringID)
@@ -59,29 +64,29 @@ func userCtx(next http.Handler) http.Handler {
 	})
 }
 
-func userGetAll(w http.ResponseWriter, r *http.Request) {
-	response.Send(w, 200, "userGetAll").JSON(storage)
+func (rs userResource) getAll(w http.ResponseWriter, r *http.Request) {
+	response.Send(w, 200, "getAll").JSON(storage)
 }
 
-func userCreateOne(w http.ResponseWriter, r *http.Request) {
-	user := &user{len(storage) + 1, "John", "john@email.com", "qwerty", ""}
+func (rs userResource) createOne(w http.ResponseWriter, r *http.Request) {
+	user := &User{len(storage) + 1, "John", "john@email.com", "qwerty", ""}
 	storage = append(storage, user)
-	response.Send(w, 201, "userCreateOne").JSON(user)
+	response.Send(w, 201, "createOne").JSON(user)
 }
 
-func userFindOne(w http.ResponseWriter, r *http.Request) {
+func (rs userResource) findOne(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	user, ok := ctx.Value(userKey).(*user)
+	user, ok := ctx.Value(userKey).(*User)
 	if !ok {
 		response.Send(w, 422).JSON()
 		return
 	}
-	response.Send(w, 200, "userFindOne").JSON(user)
+	response.Send(w, 200, "findOne").JSON(user)
 }
 
-func userUpdateOne(w http.ResponseWriter, r *http.Request) {
+func (rs userResource) updateOne(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	user, ok := ctx.Value(userKey).(*user)
+	user, ok := ctx.Value(userKey).(*User)
 	if !ok {
 		response.Send(w, 422).JSON()
 		return
@@ -90,12 +95,12 @@ func userUpdateOne(w http.ResponseWriter, r *http.Request) {
 		response.Send(w, 500, err).JSON()
 		return
 	}
-	response.Send(w, 200, "userUpdateOne").JSON(user)
+	response.Send(w, 200, "updateOne").JSON(user)
 }
 
-func userDeleteOne(w http.ResponseWriter, r *http.Request) {
+func (rs userResource) deleteOne(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	user, ok := ctx.Value(userKey).(*user)
+	user, ok := ctx.Value(userKey).(*User)
 	if !ok {
 		// http.Error(w, http.StatusText(422), 422)
 		response.Send(w, 422).JSON()
@@ -107,5 +112,5 @@ func userDeleteOne(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	response.Send(w, 200, "userDeleteOne").JSON(user)
+	response.Send(w, 200, "deleteOne").JSON(user)
 }
