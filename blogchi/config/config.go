@@ -14,7 +14,7 @@ type Config struct {
 // NewConfig create new Config
 func NewConfig() *Config {
 	env := flag.String("env", os.Getenv("ENV"), "server environment")
-	port := flag.String("port", os.Getenv("PORT"), "server listing port")
+	port := flag.String("port", os.Getenv("PORT"), "server listening port")
 
 	flag.Parse()
 

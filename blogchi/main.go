@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -16,28 +14,28 @@ import (
 var (
 	config   *c.Config
 	response utils.Response
+	logger   utils.Logger
 )
 
 func init() {
 	godotenv.Load()
 	config = c.NewConfig()
-	log.Println("ENV is", config.Env)
 	response = utils.NewResponse()
+	logger = utils.NewLogger()
+	logger.Info("ENV is", config.Env)
 }
 
-func exampleMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		next.ServeHTTP(w, r)
-	})
-}
+// func loggerMiddleware(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		next.ServeHTTP(w, r)
+// 	})
+// }
 
 func main() {
 	r := chi.NewRouter()
-
 	r.Use(middleware.Recoverer)
 	// r.Use(middleware.Logger)
 	r.Use(middleware.Timeout(60 * time.Second))
-	// r.Use(exampleMiddleware)
 
 	r.NotFound(notFound)
 	r.MethodNotAllowed(methodNotAllowed)
@@ -49,6 +47,6 @@ func main() {
 
 	r.Mount("/api/user", userAPIRouter())
 
-	fmt.Printf("Server is listening on http://localhost:%s\n", config.Port)
+	logger.Infof("Server is listening on http://localhost:%s\n", config.Port)
 	http.ListenAndServe(":"+config.Port, r)
 }

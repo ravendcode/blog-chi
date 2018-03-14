@@ -45,7 +45,7 @@ func userCtx(next http.Handler) http.Handler {
 		stringID := chi.URLParam(r, "id")
 		id, err := strconv.Atoi(stringID)
 		if err != nil {
-			response.Send(w, 500, err.Error()).JSON()
+			response.Send(w, 500, err).JSON()
 			return
 		}
 		for _, user := range storage {
@@ -87,7 +87,7 @@ func userUpdateOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := json.NewDecoder(r.Body).Decode(user); err != nil {
-		response.Send(w, http.StatusInternalServerError, err.Error()).JSON()
+		response.Send(w, 500, err).JSON()
 		return
 	}
 	response.Send(w, 200, "userUpdateOne").JSON(user)

@@ -54,12 +54,12 @@
 
     messageFormElem.onsubmit = function (event) {
       event.preventDefault();
-
-      echoWs.send(JSON.stringify({
+      var data = {
         uuid: uuid,
         type: 'client',
         data: messageInputElem.value
-      }));
+      };
+      echoWs.send(JSON.stringify(data));
       messageInputElem.value = '';
     };
   }

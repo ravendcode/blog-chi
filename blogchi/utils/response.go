@@ -2,13 +2,15 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 )
 
 // Response interface for response
 // response.Send(w, status, message).JSON(data)
 type Response interface {
-	Send(w http.ResponseWriter, statusCode int, message ...string) *response
+	Send(w http.ResponseWriter, statusCode int, v ...interface{}) *response
 	JSON(data ...interface{})
 }
 
@@ -20,7 +22,7 @@ type response struct {
 	ResponseWriter http.ResponseWriter `json:"-"`
 }
 
-func (r *response) Send(w http.ResponseWriter, statusCode int, message ...string) *response {
+func (r *response) Send(w http.ResponseWriter, statusCode int, v ...interface{}) *response {
 	r.ResponseWriter = w
 	r.StatusCode = statusCode
 
@@ -44,8 +46,8 @@ func (r *response) Send(w http.ResponseWriter, statusCode int, message ...string
 	// }
 
 	r.Status = http.StatusText(statusCode)
-	if len(message) != 0 {
-		r.Message = message[0]
+	if len(v) != 0 {
+		r.Message = strings.TrimRight(fmt.Sprintln(v...), "\n")
 	} else {
 		r.Message = http.StatusText(statusCode)
 	}
