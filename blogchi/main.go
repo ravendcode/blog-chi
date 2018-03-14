@@ -22,7 +22,7 @@ func init() {
 	config = c.NewConfig()
 	response = utils.NewResponse()
 	logger = utils.NewLogger()
-	logger.Info("ENV is", config.Env)
+	logger.Yellow().Info("ENV is", config.Env)
 }
 
 // func loggerMiddleware(next http.Handler) http.Handler {
@@ -47,6 +47,6 @@ func main() {
 
 	r.Mount("/api/user", userAPIRouter())
 
-	logger.Infof("Server is listening on http://localhost:%s\n", config.Port)
+	logger.Yellow().Infof("Server is listening on http://localhost:%s", config.Port)
 	http.ListenAndServe(":"+config.Port, r)
 }

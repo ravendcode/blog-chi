@@ -28,9 +28,15 @@
   revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
   version = "v1.2.0"
 
+[[projects]]
+  branch = "master"
+  name = "github.com/shiena/ansicolor"
+  packages = ["."]
+  revision = "a422bbe96644373c5753384a59d678f7d261ff10"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "619befd19c0009e5d8170f8782fd9bcef8a29717f97dbcd807074b8db758d213"
+  inputs-digest = "f4310a9ec90589bf1e8cd459ea4233b73c131d69e5c1506ecf6e44ca5457a9a0"
   solver-name = "gps-cdcl"
   solver-version = 1

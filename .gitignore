@@ -76,3 +76,4 @@ typings/
 dist
 tmp
 bin
+vendor
