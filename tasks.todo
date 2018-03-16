@@ -1,9 +1,9 @@
 Tasks:
 	✔ Make go on ubuntu @done (March 14th 2018, 21:42)
 	✔ Resource user API @done (March 14th 2018, 22:30)
-	☐ Validation
-	☐ JWT
+	✔ Validation @done (March 16th 2018, 19:17)
 	☐ GORM
+	☐ JWT
 	☐ Avatar image load
 	☐ Websocket file upload
 	☐ Post API

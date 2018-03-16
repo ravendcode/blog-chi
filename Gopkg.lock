@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/asaskevich/govalidator"
+  packages = ["."]
+  revision = "ccb8e960c48f04d6935e72476ae4a51028f9e22f"
+  version = "v9"
+
+[[projects]]
   name = "github.com/go-chi/chi"
   packages = [
     ".",
@@ -37,6 +43,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f4310a9ec90589bf1e8cd459ea4233b73c131d69e5c1506ecf6e44ca5457a9a0"
+  inputs-digest = "70201753ec6ff28b0344c1d1adb3f98fc52c8ddc56140b49023d0f29395adac4"
   solver-name = "gps-cdcl"
   solver-version = 1

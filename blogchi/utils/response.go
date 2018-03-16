@@ -15,6 +15,7 @@ type Response interface {
 	Send(w http.ResponseWriter, statusCode int, v ...interface{}) *response
 	JSON(data ...interface{})
 	SendFile(w http.ResponseWriter, req *http.Request, name string)
+	Validate(w http.ResponseWriter, req *http.Request, rules map[string]string, data interface{}) bool
 }
 
 type response struct {
@@ -22,6 +23,7 @@ type response struct {
 	Status         string              `json:"status,omitempty"`
 	Message        string              `json:"message,omitempty"`
 	Data           interface{}         `json:"data,omitempty"`
+	Errors         interface{}         `json:"errors,omitempty"`
 	ResponseWriter http.ResponseWriter `json:"-"`
 }
 
@@ -50,7 +52,12 @@ func (r *response) Send(w http.ResponseWriter, statusCode int, v ...interface{})
 
 	r.Status = http.StatusText(statusCode)
 	if len(v) != 0 {
-		r.Message = strings.TrimRight(fmt.Sprintln(v...), "\n")
+		if v[0] == "Validation Error" {
+			r.Errors = v[1]
+			r.Message = v[0].(string)
+		} else {
+			r.Message = strings.TrimRight(fmt.Sprintln(v...), "\n")
+		}
 	} else {
 		r.Message = http.StatusText(statusCode)
 	}
@@ -82,7 +89,22 @@ func (r *response) clean() {
 	r.Status = ""
 	r.Message = ""
 	r.Data = nil
+	r.Errors = nil
 	r.ResponseWriter = nil
+}
+
+func (r *response) Validate(w http.ResponseWriter, req *http.Request, rules map[string]string, data interface{}) bool {
+	if err := json.NewDecoder(req.Body).Decode(data); err != nil {
+		r.Send(w, 500, err).JSON()
+		return false
+	}
+	validator := NewValidator()
+	ok, errors := validator.Validate(rules, data)
+	if !ok {
+		r.Send(w, 400, "Validation Error", errors).JSON()
+		return false
+	}
+	return true
 }
 
 // NewResponse create new Response

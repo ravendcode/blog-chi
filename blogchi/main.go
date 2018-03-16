@@ -12,15 +12,17 @@ import (
 )
 
 var (
-	config   *c.Config
-	response utils.Response
-	logger   utils.Logger
+	config    *c.Config
+	response  utils.Response
+	validator utils.Validator
+	logger    utils.Logger
 )
 
 func init() {
 	godotenv.Load()
 	config = c.NewConfig()
 	response = utils.NewResponse()
+	validator = utils.NewValidator()
 	logger = utils.NewLogger()
 	logger.Yellow().Info("ENV is", config.Env)
 }

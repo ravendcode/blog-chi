@@ -8,8 +8,8 @@ POST {{host}}
 content-type: application/json
 
 {
-  "username": "Bob44",
-  "password": "qwerty"
+  "username": "lol",
+  "email": "test@email.com"
 }
 ###
 GET {{host}}/1
@@ -19,7 +19,7 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "username": "Bob"
+  "username": "admin"
 }
 ###
 DELETE {{host}}/1

@@ -9,13 +9,21 @@ import (
 	"github.com/go-chi/chi"
 )
 
+var x = "aaaa"
+
+type password string
+
+// func (password) MarshalJSON() ([]byte, error) {
+// 	return []byte(`""`), nil
+// }
+
 // User model
 type User struct {
-	ID         int    `json:"id,omitempty"`
-	Username   string `json:"username"`
-	Email      string `json:"email"`
-	Password   string `json:"-"`
-	AccesToken string `json:"accessToken"`
+	ID         int      `json:"id,omitempty"`
+	Username   string   `json:"username"`
+	Email      string   `json:"email"`
+	Password   password `json:"password"`
+	AccesToken string   `json:"accessToken"`
 }
 
 // Users slice User
@@ -69,9 +77,16 @@ func (rs userResource) getAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rs userResource) createOne(w http.ResponseWriter, r *http.Request) {
-	user := &User{len(storage) + 1, "John", "john@email.com", "qwerty", ""}
-	storage = append(storage, user)
-	response.Send(w, 201, "createOne").JSON(user)
+	rules := map[string]string{
+		"username": "required|len(2,32)|forbiddenusernames",
+		"email":    "required|email",
+		"password": "required|len(6,32)",
+	}
+	newUser := new(User)
+	if response.Validate(w, r, rules, newUser) {
+		storage = append(storage, newUser)
+		response.Send(w, 201, "createOne").JSON(newUser)
+	}
 }
 
 func (rs userResource) findOne(w http.ResponseWriter, r *http.Request) {
@@ -95,6 +110,17 @@ func (rs userResource) updateOne(w http.ResponseWriter, r *http.Request) {
 		response.Send(w, 500, err).JSON()
 		return
 	}
+	rules := map[string]string{
+		"username": "required|len(2,32)|forbiddenusernames",
+		"email":    "required|email",
+		"password": "required|len(6,32)",
+	}
+	ok, errors := validator.Validate(rules, user)
+	if !ok {
+		response.Send(w, 400, "Validation Error", errors).JSON()
+		return
+	}
+
 	response.Send(w, 200, "updateOne").JSON(user)
 }
 
