@@ -2,7 +2,7 @@
 
 ## Features
 
-1. Simple blog
+1. Simple blog on golang
 
 ## Usage
 
