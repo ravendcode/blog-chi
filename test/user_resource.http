@@ -8,8 +8,10 @@ POST {{host}}
 content-type: application/json
 
 {
+  "id": 12,
   "username": "lol",
-  "email": "test@email.com"
+  "email": "lol@email.com",
+  "password": "qwerty"
 }
 ###
 GET {{host}}/1

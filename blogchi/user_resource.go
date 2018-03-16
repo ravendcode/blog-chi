@@ -9,9 +9,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-var x = "aaaa"
-
-type password string
+// type password string
 
 // func (password) MarshalJSON() ([]byte, error) {
 // 	return []byte(`""`), nil
@@ -19,11 +17,42 @@ type password string
 
 // User model
 type User struct {
-	ID         int      `json:"id,omitempty"`
-	Username   string   `json:"username"`
-	Email      string   `json:"email"`
-	Password   password `json:"password"`
-	AccesToken string   `json:"accessToken"`
+	ID         int    `json:"id"`
+	Username   string `json:"username"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	AccesToken string `json:"accessToken"`
+}
+
+// MarshalJSON custom fields output
+func (u *User) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		ID         int    `json:"id,omitempty"`
+		Username   string `json:"username,omitempty"`
+		Email      string `json:"email,omitempty"`
+		AccesToken string `json:"accessToken,omitempty"`
+	}{
+		ID:         u.ID,
+		Username:   u.Username,
+		Email:      u.Email,
+		AccesToken: u.AccesToken,
+	})
+}
+
+// UnmarshalJSON custom fields add
+func (u *User) UnmarshalJSON(b []byte) error {
+	decoded := new(struct {
+		Username string `json:"username,omitempty"`
+		Email    string `json:"email,omitempty"`
+		Password string `json:"password,omitempty"`
+	})
+	err := json.Unmarshal(b, decoded)
+	if err == nil {
+		u.Username = decoded.Username
+		u.Email = decoded.Email
+		u.Password = decoded.Password
+	}
+	return err
 }
 
 // Users slice User
@@ -84,6 +113,7 @@ func (rs userResource) createOne(w http.ResponseWriter, r *http.Request) {
 	}
 	newUser := new(User)
 	if response.Validate(w, r, rules, newUser) {
+		newUser.ID = len(storage) + 1
 		storage = append(storage, newUser)
 		response.Send(w, 201, "createOne").JSON(newUser)
 	}
