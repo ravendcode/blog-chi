@@ -42,8 +42,6 @@ func (v *validator) Validate(dataRules map[string]interface{}, data interface{})
 					v.required(field, value)
 				case "email":
 					v.email(field, value)
-				// case "unique":
-				// 	v.unique(field, value)
 				case "forbiddenusernames", "forbiddenUsernames":
 					v.forbiddenUsernames(field, value)
 				}
@@ -74,20 +72,20 @@ func (v *validator) Validate(dataRules map[string]interface{}, data interface{})
 
 func (v *validator) required(field string, value string) {
 	if value == "" {
-		v.Errors[field] = fmt.Sprintf("%s is required", field)
+		v.AddError(field, fmt.Sprintf("%s is required", field))
 	}
 }
 
 func (v *validator) email(field string, value string) {
 	if !govalidator.IsEmail(value) {
-		v.Errors[field] = fmt.Sprintf("%s is not correct email", field)
+		v.AddError(field, fmt.Sprintf("%s is not correct email", field))
 	}
 }
 
 func (v *validator) forbiddenUsernames(field string, value string) {
 	reserveRegexp := regexp.MustCompile("((?i)admin|(?i)админ)")
 	if reserveRegexp.MatchString(value) {
-		v.Errors[field] = fmt.Sprintf("%s %s is forbidden", field, value)
+		v.AddError(field, fmt.Sprintf("%s %s is forbidden", field, value))
 	}
 }
 
@@ -104,7 +102,7 @@ func (v *validator) Unique(field string, data interface{}, storage []interface{}
 
 func (v *validator) len(field string, value string, min string, max string) {
 	if !govalidator.RuneLength(value, min, max) {
-		v.Errors[field] = fmt.Sprintf("%s must min len %s and max %s", field, min, max)
+		v.AddError(field, fmt.Sprintf("%s must min len %s and max %s", field, min, max))
 	}
 }
 
