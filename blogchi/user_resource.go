@@ -106,13 +106,35 @@ func (rs userResource) getAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rs userResource) createOne(w http.ResponseWriter, r *http.Request) {
-	rules := map[string]string{
+	newUser := new(User)
+	if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
+		response.Send(w, 500, err).JSON()
+		return
+	}
+	// var interfaceSlice = make([]interface{}, len(storage))
+	// for i, u := range storage {
+	// 	interfaceSlice[i] = u
+	// }
+	// validator.Unique("username", newUser, interfaceSlice)
+	// validator.Unique("email", newUser, interfaceSlice)
+	for _, u := range storage {
+		if u.Username == newUser.Username {
+			validator.AddError("username", "username is unique")
+			break
+		}
+	}
+	for _, u := range storage {
+		if u.Email == newUser.Email {
+			validator.AddError("email", "email is unique")
+			break
+		}
+	}
+	rules := map[string]interface{}{
 		"username": "required|len(2,32)|forbiddenusernames",
 		"email":    "required|email",
 		"password": "required|len(6,32)",
 	}
-	newUser := new(User)
-	if response.Validate(w, r, rules, newUser) {
+	if response.Validate(w, validator, rules, newUser) {
 		newUser.ID = len(storage) + 1
 		storage = append(storage, newUser)
 		response.Send(w, 201, "createOne").JSON(newUser)
@@ -136,17 +158,30 @@ func (rs userResource) updateOne(w http.ResponseWriter, r *http.Request) {
 		response.Send(w, 422).JSON()
 		return
 	}
-	if err := json.NewDecoder(r.Body).Decode(user); err != nil {
+	newUser := *user
+	if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
 		response.Send(w, 500, err).JSON()
 		return
 	}
-	rules := map[string]string{
+	for _, u := range storage {
+		if u.Username == newUser.Username && u.ID != newUser.ID {
+			validator.AddError("username", "username is unique")
+			break
+		}
+	}
+	for _, u := range storage {
+		if u.Email == newUser.Email && u.ID != newUser.ID {
+			validator.AddError("email", "email is unique")
+			break
+		}
+	}
+	rules := map[string]interface{}{
 		"username": "required|len(2,32)|forbiddenusernames",
 		"email":    "required|email",
 		"password": "required|len(6,32)",
 	}
-	ok, errors := validator.Validate(rules, user)
-	if !ok {
+	errors := validator.Validate(rules, &newUser)
+	if errors != nil {
 		response.Send(w, 400, "Validation Error", errors).JSON()
 		return
 	}

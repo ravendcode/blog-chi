@@ -15,7 +15,7 @@ type Response interface {
 	Send(w http.ResponseWriter, statusCode int, v ...interface{}) *response
 	JSON(data ...interface{})
 	SendFile(w http.ResponseWriter, req *http.Request, name string)
-	Validate(w http.ResponseWriter, req *http.Request, rules map[string]string, data interface{}) bool
+	Validate(w http.ResponseWriter, validator Validator, rules map[string]interface{}, data interface{}) bool
 }
 
 type response struct {
@@ -93,14 +93,9 @@ func (r *response) clean() {
 	r.ResponseWriter = nil
 }
 
-func (r *response) Validate(w http.ResponseWriter, req *http.Request, rules map[string]string, data interface{}) bool {
-	if err := json.NewDecoder(req.Body).Decode(data); err != nil {
-		r.Send(w, 500, err).JSON()
-		return false
-	}
-	validator := NewValidator()
-	ok, errors := validator.Validate(rules, data)
-	if !ok {
+func (r *response) Validate(w http.ResponseWriter, validator Validator, rules map[string]interface{}, data interface{}) bool {
+	errors := validator.Validate(rules, data)
+	if errors != nil {
 		r.Send(w, 400, "Validation Error", errors).JSON()
 		return false
 	}
