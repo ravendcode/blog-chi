@@ -14,6 +14,7 @@ type Validator interface {
 	Init() Validator
 	AddError(field, message string)
 	Validate(dataRules map[string]interface{}, data interface{}) map[string]string
+	Check() map[string]string
 	Unique(field string, data interface{}, storage []interface{}, checkID ...bool)
 }
 
@@ -24,6 +25,18 @@ type validator struct {
 func (v *validator) Init() Validator {
 	v.Errors = make(map[string]string)
 	return v
+}
+
+func (v *validator) Check() map[string]string {
+	if len(v.Errors) > 0 {
+		tmp := make(map[string]string)
+		for k, v := range v.Errors {
+			tmp[k] = v
+		}
+		v.Init()
+		return tmp
+	}
+	return nil
 }
 
 func (v *validator) Validate(dataRules map[string]interface{}, data interface{}) map[string]string {
@@ -59,15 +72,7 @@ func (v *validator) Validate(dataRules map[string]interface{}, data interface{})
 			}
 		}
 	}
-	if len(v.Errors) > 0 {
-		tmp := make(map[string]string)
-		for k, v := range v.Errors {
-			tmp[k] = v
-		}
-		v.Init()
-		return tmp
-	}
-	return nil
+	return v.Check()
 }
 
 func (v *validator) required(field string, value string) {

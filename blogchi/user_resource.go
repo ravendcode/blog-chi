@@ -181,12 +181,14 @@ func (rs userResource) updateOne(w http.ResponseWriter, r *http.Request) {
 	// 		break
 	// 	}
 	// }
-	rules := map[string]interface{}{
-		"username": "required|len(2,32)|forbiddenusernames",
-		"email":    "required|email",
-		// "password": "required|len(6,32)",
-	}
-	errors := validator.Validate(rules, &newUser)
+
+	// rules := map[string]interface{}{
+	// 	"username": "required|len(2,32)|forbiddenusernames",
+	// 	"email":    "required|email",
+	// 	// "password": "required|len(6,32)",
+	// }
+	// errors := validator.Validate(rules, &newUser)
+	errors := validator.Check()
 	if errors != nil {
 		response.Send(w, 400, "Validation Error", errors).JSON()
 		return
