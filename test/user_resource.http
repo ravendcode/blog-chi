@@ -21,8 +21,8 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "username": "root",
-  "email": "root@email.com"
+  "username": "lol",
+  "email": "lol@email.com"
 }
 ###
 DELETE {{host}}/1

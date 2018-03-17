@@ -14,7 +14,7 @@ type Validator interface {
 	Init() Validator
 	AddError(field, message string)
 	Validate(dataRules map[string]interface{}, data interface{}) map[string]string
-	Unique(field string, data interface{}, storage []interface{})
+	Unique(field string, data interface{}, storage []interface{}, checkID ...bool)
 }
 
 type validator struct {
@@ -89,13 +89,26 @@ func (v *validator) forbiddenUsernames(field string, value string) {
 	}
 }
 
-func (v *validator) Unique(field string, data interface{}, storage []interface{}) {
-	for _, s := range storage {
-		sValue := reflect.ValueOf(s).Elem().FieldByName(strings.Title(field)).String()
-		dataValue := reflect.ValueOf(data).Elem().FieldByName(strings.Title(field)).String()
-		if sValue == dataValue {
-			v.AddError(field, fmt.Sprintf("%s is unique", field))
-			break
+// Unique default checkID = false
+func (v *validator) Unique(field string, data interface{}, storage []interface{}, checkID ...bool) {
+	dataValue := reflect.ValueOf(data).Elem().FieldByName(strings.Title(field)).String()
+	if len(checkID) > 0 {
+		dataID := reflect.ValueOf(data).Elem().FieldByName("ID").Int()
+		for _, s := range storage {
+			sValue := reflect.ValueOf(s).Elem().FieldByName(strings.Title(field)).String()
+			sID := reflect.ValueOf(s).Elem().FieldByName("ID").Int()
+			if sValue == dataValue && sID != dataID {
+				v.AddError(field, fmt.Sprintf("%s is unique", field))
+				break
+			}
+		}
+	} else {
+		for _, s := range storage {
+			sValue := reflect.ValueOf(s).Elem().FieldByName(strings.Title(field)).String()
+			if sValue == dataValue {
+				v.AddError(field, fmt.Sprintf("%s is unique", field))
+				break
+			}
 		}
 	}
 }

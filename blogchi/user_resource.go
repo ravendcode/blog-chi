@@ -111,24 +111,24 @@ func (rs userResource) createOne(w http.ResponseWriter, r *http.Request) {
 		response.Send(w, 500, err).JSON()
 		return
 	}
-	// var interfaceSlice = make([]interface{}, len(storage))
-	// for i, u := range storage {
-	// 	interfaceSlice[i] = u
+	var storageSliceI = make([]interface{}, len(storage))
+	for i, u := range storage {
+		storageSliceI[i] = u
+	}
+	validator.Unique("username", newUser, storageSliceI)
+	validator.Unique("email", newUser, storageSliceI)
+	// for _, u := range storage {
+	// 	if u.Username == newUser.Username {
+	// 		validator.AddError("username", "username is unique")
+	// 		break
+	// 	}
 	// }
-	// validator.Unique("username", newUser, interfaceSlice)
-	// validator.Unique("email", newUser, interfaceSlice)
-	for _, u := range storage {
-		if u.Username == newUser.Username {
-			validator.AddError("username", "username is unique")
-			break
-		}
-	}
-	for _, u := range storage {
-		if u.Email == newUser.Email {
-			validator.AddError("email", "email is unique")
-			break
-		}
-	}
+	// for _, u := range storage {
+	// 	if u.Email == newUser.Email {
+	// 		validator.AddError("email", "email is unique")
+	// 		break
+	// 	}
+	// }
 	rules := map[string]interface{}{
 		"username": "required|len(2,32)|forbiddenusernames",
 		"email":    "required|email",
@@ -163,22 +163,28 @@ func (rs userResource) updateOne(w http.ResponseWriter, r *http.Request) {
 		response.Send(w, 500, err).JSON()
 		return
 	}
-	for _, u := range storage {
-		if u.Username == newUser.Username && u.ID != newUser.ID {
-			validator.AddError("username", "username is unique")
-			break
-		}
+	var storageSliceI = make([]interface{}, len(storage))
+	for i, u := range storage {
+		storageSliceI[i] = u
 	}
-	for _, u := range storage {
-		if u.Email == newUser.Email && u.ID != newUser.ID {
-			validator.AddError("email", "email is unique")
-			break
-		}
-	}
+	validator.Unique("username", &newUser, storageSliceI, true)
+	validator.Unique("email", &newUser, storageSliceI, true)
+	// for _, u := range storage {
+	// 	if u.Username == newUser.Username && u.ID != newUser.ID {
+	// 		validator.AddError("username", "username is unique")
+	// 		break
+	// 	}
+	// }
+	// for _, u := range storage {
+	// 	if u.Email == newUser.Email && u.ID != newUser.ID {
+	// 		validator.AddError("email", "email is unique")
+	// 		break
+	// 	}
+	// }
 	rules := map[string]interface{}{
 		"username": "required|len(2,32)|forbiddenusernames",
 		"email":    "required|email",
-		"password": "required|len(6,32)",
+		// "password": "required|len(6,32)",
 	}
 	errors := validator.Validate(rules, &newUser)
 	if errors != nil {
